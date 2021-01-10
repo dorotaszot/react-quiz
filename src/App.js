@@ -7,8 +7,8 @@ function App() {
     {
       questionText: 'What is the capital of the USA?',
       answerOptions: [
-        { answerText: 'Washington', isCorrect: true },
-        { answerText: 'New York', isCorrect: false },
+        { answerText: 'Washington', isCorrect: false },
+        { answerText: 'New York', isCorrect: true },
         { answerText: 'Chicago', isCorrect: false },
         { answerText: 'Los Angeles', isCorrect: false },
       ]
@@ -51,31 +51,50 @@ function App() {
     }
   ];
 
-  const [currentQuestionNumber, setCurrentQuestionNumber] = useState(1);
+  const [currentQuestionNumber, setCurrentQuestionNumber] = useState(0);
+  const [score, setScore] = useState(0);
+  const [showScore, setShowScore] = useState(false);
 
-  const handleAnswerBtnClick = () => {
+  const handleAnswerBtnClick = (isCorrect) => {
+    
+
+    if(isCorrect) {
+      setScore(score + 1);
+    }
+    
+    
     const nextQuestionNumber = currentQuestionNumber +1;
-    setCurrentQuestionNumber(nextQuestionNumber);
-  }
-
+    if(nextQuestionNumber < questions.length) {
+      setCurrentQuestionNumber(nextQuestionNumber);
+    } else {
+      setShowScore(true);
+    };
+   
+  };
+  console.log(score);
   // const handleAnswerBtnClick = () => {
   //   currentQuestion = currentQuestion + 1;
   // }
 
   return (
     <div className="App">
-      <div className="card">
-        <h2 className="question-count">Question {currentQuestionNumber}/{questions.length}</h2>
-        <h3 className="question-text">{questions[currentQuestionNumber].questionText}</h3>
-      </div>
-      <div className="answers-wrapper">
-        {questions[currentQuestionNumber].answerOptions.map((answerOption) => 
-          <button onClick={() => handleAnswerBtnClick()}>{answerOption.answerText}</button>
-        )
-        }
-      </div>
+      {showScore ? (
+        <div className="card">
+          <h2 className="final-score">You scored {score} out of {questions.length}</h2>
+        </div>
+      ) : (
+        <div className="card">
+          <h2 className="question-count">Question {currentQuestionNumber}/{questions.length}</h2>
+          <h3 className="question-text">{questions[currentQuestionNumber].questionText}</h3>
+      
+          <div className="answers-wrapper">
+            {questions[currentQuestionNumber].answerOptions.map((answerOption) => 
+              <button onClick={() => handleAnswerBtnClick(answerOption.isCorrect)}>{answerOption.answerText}</button>
+            )}
+          </div>
+        </div>
+      )}
     </div>
-  );
+  )
 }
-
 export default App;
