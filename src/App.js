@@ -54,42 +54,48 @@ function App() {
   const [currentQuestionNumber, setCurrentQuestionNumber] = useState(0);
   const [score, setScore] = useState(0);
   const [showScore, setShowScore] = useState(false);
+  // const [bgColor, setBgColor] = useState();
+
 
   const handleAnswerBtnClick = (isCorrect) => {
-    
-
     if(isCorrect) {
-      setScore(score + 1);
+      setScore(score + 1);      
     }
-    
     
     const nextQuestionNumber = currentQuestionNumber +1;
     if(nextQuestionNumber < questions.length) {
-      setCurrentQuestionNumber(nextQuestionNumber);
+      // setTimeout(() => {
+        setCurrentQuestionNumber(nextQuestionNumber);
+      // }, 2000);
+      
     } else {
       setShowScore(true);
     };
-   
   };
   console.log(score);
-  // const handleAnswerBtnClick = () => {
-  //   currentQuestion = currentQuestion + 1;
-  // }
 
+  const tryAgainBtn = () => {
+    setCurrentQuestionNumber(0);
+    setScore(0);
+    setShowScore(false);
+  }
+ 
   return (
     <div className="App">
       {showScore ? (
-        <div className="card">
+        <div className="card final-score-card">
           <h2 className="final-score">You scored {score} out of {questions.length}</h2>
+          <button className='try-again-btn' onClick={() => tryAgainBtn()}>Try again</button>
         </div>
       ) : (
         <div className="card">
-          <h2 className="question-count">Question {currentQuestionNumber}/{questions.length}</h2>
-          <h3 className="question-text">{questions[currentQuestionNumber].questionText}</h3>
-      
+          <div className="question-part">
+            <h2 className="question-count">Question {currentQuestionNumber}/{questions.length}</h2>
+            <h3 className="question-text">{questions[currentQuestionNumber].questionText}</h3>
+          </div>
           <div className="answers-wrapper">
             {questions[currentQuestionNumber].answerOptions.map((answerOption) => 
-              <button onClick={() => handleAnswerBtnClick(answerOption.isCorrect)}>{answerOption.answerText}</button>
+              <button onClick={() => handleAnswerBtnClick(answerOption.isCorrect)}>{answerOption.answerText} </button>
             )}
           </div>
         </div>
